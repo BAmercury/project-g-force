@@ -23,11 +23,8 @@ String incoming_string = "";
 double desired_speed = 00.00;
 String command = "0";
 boolean newData = false;
-boolean newData_desired = false;
-const byte numChars = 32;
-const byte numChars_desired = 32;
+const byte numChars = 3;
 char recievedChars[numChars];
-char recievedDesiredChars[numChars_desired];
 
 Stepper stepper(stepsPerRevolution, 8, 9, 10, 11);
 int c = 0;
@@ -106,13 +103,17 @@ void loop() {
 			{
 				desired_speed = Serial.parseFloat();
 				stop_test = false;
+				c = 0;
+				//Serial.flush();
+				//Serial.println();
 				//newData_desired = true;
 			}
 
 		}
 		else if (stop_test == false)
 		{
-			long time = millis();
+			//time = millis();
+			long start_time = millis();
 			stepper.setSpeed(desired_speed);
 			while (stop_test == false)
 			{
@@ -120,7 +121,7 @@ void loop() {
 				c = c + 1;
 				if (millis() > time + interval)
 				{
-					long time = millis();
+					long time = millis() - start_time;
 					Serial.print(c);
 					Serial.print(",");
 					Serial.print(time);

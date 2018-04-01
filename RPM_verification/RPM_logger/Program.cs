@@ -64,24 +64,27 @@ namespace RPM_logger
 
                         if (s == "give")
                         {
-                            //double position = 30.00;
+                        //double position = 30.00;
+                            Console.WriteLine("Input desired speed");
                             string user_input = Console.ReadLine();
                             //double desired_pos = Convert.ToDouble(user_input);
                             port.WriteLine(user_input);
                             quick_three = false;
-                            //Console.WriteLine("lol");
+                        //Console.WriteLine("lol");
+                        //port.Flush();
                             break;
                         }
                     }
                 }
                 bool stop = true;
+            Console.WriteLine("Test Started");
                 while (stop)
                 {
-
                     if (port.BytesToRead > 0)
                     {
                         string s = port.ReadLine();
-                        if (s == "end")
+                        s = Regex.Replace(s, @"\r", string.Empty);
+                    if (s == "end")
                         {
                             stop = false;
                             break;
@@ -123,6 +126,7 @@ namespace RPM_logger
                     tw.WriteLine();
                 }
             }
+            Console.WriteLine("Wrote to file");
 
 
         }
