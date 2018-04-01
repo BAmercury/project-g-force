@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RPM_verification", "RPM_verification\RPM_verification.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BFB4B761-BB92-4C17-A834-6531E9AC0CB4}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\motor_driver_pinout.png = ..\docs\motor_driver_pinout.png
+		..\sketch_mar01a.ino = ..\sketch_mar01a.ino
+		..\stepper_oneRevolution.ino = ..\stepper_oneRevolution.ino
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPM_logger", "RPM_logger\RPM_logger.csproj", "{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F72F53D0-16E7-413E-A8AB-CD20FFCCAF77}
+	EndGlobalSection
+EndGlobal
