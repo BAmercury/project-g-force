@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectGForce_AnalogInterface", "ProjectGForce_AnalogInterface\ProjectGForce_AnalogInterface.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RPM_verification", "..\RPM_verification\RPM_verification\RPM_verification.vcxproj", "{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPM_logger", "..\RPM_verification\RPM_logger\RPM_logger.csproj", "{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{79B3F179-0834-430E-AAAE-239ED4F28C75}"
+	ProjectSection(SolutionItems) = preProject
+		..\angle.ino = ..\angle.ino
+		..\big_kahuna.ino = ..\big_kahuna.ino
+		..\lcd_buttons.ino = ..\lcd_buttons.ino
+		..\lcd_rpm.ino = ..\lcd_rpm.ino
+		..\sketch_mar01a.ino = ..\sketch_mar01a.ino
+		..\stepper_oneRevolution.ino = ..\stepper_oneRevolution.ino
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Debug|x86.ActiveCfg = Debug|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Debug|x86.Build.0 = Debug|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Release|x86.ActiveCfg = Release|Win32
+		{B875C2A6-21BE-49C2-A40C-C0A5745B41B3}.Release|x86.Build.0 = Release|Win32
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3368BAC-DF14-4F5E-96AE-EAFC4583DBA2}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F684BED-0146-4011-B3E9-22AEF1C62661}
+	EndGlobalSection
+EndGlobal
