@@ -49,61 +49,7 @@ struct CommandPacket
 
 CommandPacket command_packet;
 
-void setup() {
-
-	// LCD Setup
-	screen.begin(16, 2); // Setup initial columns and rows. Size of display is 16x2
-	// Initial Hello to warm up screen
-	screen.print("Greetings!");
-	screen.setBacklight(WHITE);
-	Serial.begin(115200);
-
-
-}
-
-// the loop function runs over and over again until power down or reset
-void loop() {
-
-	if (user_input = true)
-	{
-		command_packet = prompt_user_input();
-		user_input = false;
-
-	}
-
-	if (user_input = false)
-	{
-		set_rpm(command_packet.rpm_desired);
-	}
-
-
-	
-  
-}
-
-void set_angle(int desired_angle)
-{
-	angle_stepper.setSpeed(60);
-	int limit = digitalRead(3);
-	if (limit == LOW)
-	{
-		angle_stepper.step(desired_angle);
-
-	}
-
-
-}
-
-void set_rpm(int desired_rpm)
-{
-	for (int i = 0; i <= desired_rpm; i++)
-	{
-		rpm_stepper.setSpeed(i);
-		rpm_stepper.step(steps_per_revolution);
-	}
-}
-
-CommandPacket prompt_user_input()
+struct CommandPacket prompt_user_input()
 {
 	screen.setBacklight(TEAL);
 	screen.clear();
@@ -111,7 +57,7 @@ CommandPacket prompt_user_input()
 	int rpm_desired;
 	int angle_desired;
 	CommandPacket commands;
-	while (user_input)
+	while (user_veri)
 	{
 
 
@@ -136,8 +82,6 @@ CommandPacket prompt_user_input()
 			screen.noBlink();
 			screen.setBacklight(RED);
 			user_veri = false;
-			Serial.println(rpm_desired);
-			Serial.println(angle_desired);
 			commands.angle_desired = angle_desired;
 			commands.rpm_desired = rpm_desired;
 			return commands;
@@ -148,3 +92,79 @@ CommandPacket prompt_user_input()
 
 
 }
+
+void setup() {
+
+	// LCD Setup
+	screen.begin(16, 2); // Setup initial columns and rows. Size of display is 16x2
+	// Initial Hello to warm up screen
+	screen.print("Greetings!");
+	screen.setBacklight(WHITE);
+	Serial.begin(115200);
+
+
+}
+
+// the loop function runs over and over again until power down or reset
+void loop() {
+
+	if (user_input == true)
+	{
+		command_packet = prompt_user_input();
+		Serial.println("Got commands");
+		Serial.println(command_packet.angle_desired);
+		Serial.println(command_packet.rpm_desired);
+		user_input = false;
+
+	}
+
+	if (user_input == false)
+	{
+		Serial.println("Here");
+		set_rpm(command_packet.rpm_desired);
+	}
+
+
+	
+  
+}
+
+void set_angle(int desired_angle)
+{
+	angle_stepper.setSpeed(60);
+	int limit = digitalRead(3);
+	if (limit == LOW)
+	{
+		angle_stepper.step(desired_angle);
+
+	}
+
+
+}
+
+void set_rpm(int desired_rpm)
+{
+	int c = 0;
+	long start_time = millis();
+	bool stop = false;
+	rpm_stepper.setSpeed(desired_rpm);
+	while (stop == false) {
+		rpm_stepper.step(steps_per_revolution);
+		c = c + 1;
+		long time = millis() - start_time;
+		long minutes = time * (1 / 1000)* (1 / 60);
+		screen.setCursor(0, 0);
+		screen.print(c / minutes);
+		uint8_t buttons = screen.readButtons();
+		if (buttons & BUTTON_SELECT) {
+			screen.setBacklight(WHITE);
+			screen.clear();
+			screen.print("Stopping Test");
+			user_input = true;
+			stop = true;
+			break;
+
+		}
+	}
+}
+
