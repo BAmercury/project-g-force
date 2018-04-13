@@ -64,12 +64,14 @@ struct CommandPacket prompt_user_input()
 
 		screen.setCursor(0, 0);
 		screen.print("Desired RPM: ");
-		rpm_desired = 50;
+		rpm_desired = analogRead(0);
+		rpm_desired = map(rpm_desired, 0, 1023, 0, 150);
 		screen.print(rpm_desired);
 		screen.blink();
 		screen.setCursor(0, 1);
 		screen.print("Desired Angle: ");
-		angle_desired = 30;
+		angle_desired = analogRead(1);
+		angle_desired = map(angle_desired, 0, 1023, 0, 90);
 		screen.print(angle_desired);
 		screen.blink();
 
@@ -121,6 +123,7 @@ void loop() {
 	if (user_input == false)
 	{
 		Serial.println("Here");
+		set_angle(command_packet.angle_desired);
 		set_rpm(command_packet.rpm_desired);
 	}
 
@@ -147,19 +150,22 @@ void set_rpm(int desired_rpm)
 	int c = 0;
 	long start_time = millis();
 	bool stop = false;
-	rpm_stepper.setSpeed(desired_rpm);
+
 	while (stop == false) {
-		rpm_stepper.step(steps_per_revolution);
-		c = c + 1;
-		long time = millis() - start_time;
-		long minutes = time * (1 / 1000)* (1 / 60);
-		screen.setCursor(0, 0);
-		screen.print(c / minutes);
+		rpm_stepper.setSpeed(desired_rpm);
+		rpm_stepper.step(steps_per_revolution/100);
+		//c = c + 1;
+		//long time = millis() - start_time;
+		//long minutes = time * (1 / 1000)* (1 / 60);
+		//screen.clear();
+		//screen.setCursor(0, 0);
+		//screen.print(c / minutes);
 		uint8_t buttons = screen.readButtons();
 		if (buttons & BUTTON_SELECT) {
 			screen.setBacklight(WHITE);
 			screen.clear();
 			screen.print("Stopping Test");
+			rpm_stepper.setSpeed(0);
 			user_input = true;
 			stop = true;
 			break;
