@@ -1,3 +1,4 @@
+#include <AccelStepper.h>
 /*
  Name:		ProjectGForce_AnalogInterface.ino
  Created:	4/12/2018 3:55:39 AM
@@ -5,7 +6,6 @@
 */
 
 // the setup function runs once when you press reset or power the board
-#include <Stepper.h>
 #include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
 #include <utility/Adafruit_MCP23017.h>
@@ -33,8 +33,12 @@ int angle_stick = 0;
 // rotation and holding stuff
 const int steps_per_revolution = 200;
 
-Stepper rpm_stepper(steps_per_revolution, 8, 9, 10, 11);
-Stepper angle_stepper(steps_per_revolution, 4,5,6,7);
+
+AccelStepper rpm_stepper(AccelStepper::FULL4WIRE, 8, 9, 10, 11);
+AccelStepper angle_stepper(AccelStepper::FULL4WIRE, 4, 5, 6, 7);
+
+//Stepper rpm_stepper(steps_per_revolution, 8, 9, 10, 11);
+//Stepper angle_stepper(steps_per_revolution, 4,5,6,7);
 
 // Time
 long time = 0;
@@ -104,6 +108,14 @@ void setup() {
 	screen.setBacklight(WHITE);
 	Serial.begin(115200);
 
+	rpm_stepper.setAcceleration(0.5);
+	rpm_stepper.setMaxSpeed(500); //500 steps per second
+
+	angle_stepper.setAcceleration(0.1);
+	angle_stepper.setMaxSpeed(33.33); // 10 RPM convereted to steps
+	angle_stepper.setCurrentPosition(0);
+
+
 
 }
 
@@ -134,43 +146,50 @@ void loop() {
 
 void set_angle(int desired_angle)
 {
-	angle_stepper.setSpeed(60);
-	int limit = digitalRead(3);
-	if (limit == LOW)
-	{
-		angle_stepper.step(desired_angle);
+	// Convert desired angle to steps
+	long position = desired_angle * (2.85714); // Angle to Steps based on step angle of 0.35
 
-	}
+	// Blocks until it reaches its position, then the RPM code should kick in
+	angle_stepper.runToNewPosition(desired_angle);
+
+	
 
 
 }
 
 void set_rpm(int desired_rpm)
 {
-	int c = 0;
-	long start_time = millis();
-	bool stop = false;
+	// Convert Desired RPM to Steps/Second
+	float desired_speed = desired_rpm * (3.3333);
 
-	while (stop == false) {
-		rpm_stepper.setSpeed(desired_rpm);
-		rpm_stepper.step(steps_per_revolution/100);
+	// Sets speed in Steps per Second
+	rpm_stepper.setSpeed(desired_rpm);
+	rpm_stepper.runSpeed();
+
+
+	//int c = 0;
+	//long start_time = millis();
+	//bool stop = false;
+
+	//while (stop == false) {
+	//	rpm_stepper.setSpeed(desired_rpm);
+	//	rpm_stepper.step(steps_per_revolution/100);
 		//c = c + 1;
 		//long time = millis() - start_time;
 		//long minutes = time * (1 / 1000)* (1 / 60);
 		//screen.clear();
 		//screen.setCursor(0, 0);
 		//screen.print(c / minutes);
-		uint8_t buttons = screen.readButtons();
-		if (buttons & BUTTON_SELECT) {
-			screen.setBacklight(WHITE);
-			screen.clear();
-			screen.print("Stopping Test");
-			rpm_stepper.setSpeed(0);
-			user_input = true;
-			stop = true;
-			break;
+	uint8_t buttons = screen.readButtons();
+	if (buttons & BUTTON_SELECT) {
+		screen.setBacklight(WHITE);
+		screen.clear();
+		screen.print("Stopping Test");
+		rpm_stepper.stop();
+		angle_stepper.runToNewPosition(0);
+		user_input = true;
 
 		}
-	}
+	
 }
 
