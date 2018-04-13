@@ -68,14 +68,14 @@ struct CommandPacket prompt_user_input()
 
 		screen.setCursor(0, 0);
 		screen.print("Desired RPM: ");
-		rpm_desired = analogRead(0);
-		rpm_desired = map(rpm_desired, 0, 1023, 0, 150);
+		rpm_stick = analogRead(0);
+		rpm_desired = map(rpm_stick, 0, 1023, 0, 150);
 		screen.print(rpm_desired);
 		screen.blink();
 		screen.setCursor(0, 1);
 		screen.print("Desired Angle: ");
-		angle_desired = analogRead(1);
-		angle_desired = map(angle_desired, 0, 1023, 0, 90);
+		angle_stick = analogRead(1);
+		angle_desired = map(angle_stick, 0, 1023, 0, 90);
 		screen.print(angle_desired);
 		screen.blink();
 
@@ -134,9 +134,24 @@ void loop() {
 
 	if (user_input == false)
 	{
-		Serial.println("Here");
+		screen.clear();
+		screen.setBacklight(TEAL);
+		screen.setCursor(0, 0);
+		screen.print("RUNNING TEST");
 		set_angle(command_packet.angle_desired);
 		set_rpm(command_packet.rpm_desired);
+
+		// See if user has pushed the stop button. Set user_input back to true and wait for next set of commands
+		uint8_t buttons = screen.readButtons();
+		if (buttons & BUTTON_SELECT) {
+			screen.setBacklight(WHITE);
+			screen.clear();
+			screen.print("Stopping Test");
+			rpm_stepper.stop();
+			angle_stepper.runToNewPosition(0);
+			user_input = true;
+
+		}
 	}
 
 
@@ -148,9 +163,13 @@ void set_angle(int desired_angle)
 {
 	// Convert desired angle to steps
 	long position = desired_angle * (2.85714); // Angle to Steps based on step angle of 0.35
+	if (angle_stepper.currentPosition() != position)
+	{
+		// Blocks until it reaches its position, then the RPM code should kick in
+		angle_stepper.runToNewPosition(desired_angle);
 
-	// Blocks until it reaches its position, then the RPM code should kick in
-	angle_stepper.runToNewPosition(desired_angle);
+
+	}
 
 	
 
@@ -167,29 +186,6 @@ void set_rpm(int desired_rpm)
 	rpm_stepper.runSpeed();
 
 
-	//int c = 0;
-	//long start_time = millis();
-	//bool stop = false;
-
-	//while (stop == false) {
-	//	rpm_stepper.setSpeed(desired_rpm);
-	//	rpm_stepper.step(steps_per_revolution/100);
-		//c = c + 1;
-		//long time = millis() - start_time;
-		//long minutes = time * (1 / 1000)* (1 / 60);
-		//screen.clear();
-		//screen.setCursor(0, 0);
-		//screen.print(c / minutes);
-	uint8_t buttons = screen.readButtons();
-	if (buttons & BUTTON_SELECT) {
-		screen.setBacklight(WHITE);
-		screen.clear();
-		screen.print("Stopping Test");
-		rpm_stepper.stop();
-		angle_stepper.runToNewPosition(0);
-		user_input = true;
-
-		}
 	
 }
 
