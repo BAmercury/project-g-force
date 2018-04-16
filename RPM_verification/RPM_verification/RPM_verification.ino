@@ -1,7 +1,7 @@
 /*
  Name:		RPM_verification.ino
  Created:	4/1/2018 2:42:59 PM
- Author:	Merc
+ Author:	Bhautik (Brian) Amin
 
  Motor: Nema 17 Bipolar 1.8deg, 26Ncm
  0.4 A, 12V supply
@@ -12,10 +12,15 @@
 
 */
 
-#include <Stepper.h>
+
+#include <AccelStepper.h>
 
 
-const int stepsPerRevolution = 200;
+
+const int steps_per_revolution = 200;
+
+AccelStepper rpm_stepper(AccelStepper::FULL4WIRE, 8, 9, 10, 11);
+
 
 long time = 0;
 int interval = 500; //ms
@@ -26,7 +31,6 @@ boolean newData = false;
 const byte numChars = 3;
 char recievedChars[numChars];
 
-Stepper stepper(stepsPerRevolution, 8, 9, 10, 11);
 int c = 0;
 bool stop_test = true;
 // the setup function runs once when you press reset or power the board
@@ -114,11 +118,16 @@ void loop() {
 		{
 			//time = millis();
 			long start_time = millis();
-			stepper.setSpeed(desired_speed);
+			rpm_stepper.setSpeed(desired_speed);
 			while (stop_test == false)
 			{
-				stepper.step(stepsPerRevolution);
-				c = c + 1;
+				rpm_stepper.runSpeed();
+				long current_position = rpm_stepper.currentPosition();
+				if (current_position == steps_per_revolution)
+				{
+					c = c + 1;
+
+				}
 				if (millis() > time + interval)
 				{
 					long time = millis() - start_time;
