@@ -53,63 +53,7 @@ namespace RPM_logger
                     }
                 }
 
-                port.Write("<1>");
-                bool quick_three = true;
-                while (quick_three)
-                {
-                    if (port.BytesToRead > 0)
-                    {
-                        string s = port.ReadLine();
-                        s = Regex.Replace(s, @"\r", string.Empty);
-
-                        if (s == "give")
-                        {
-                        //double position = 30.00;
-                            Console.WriteLine("Input desired speed");
-                            string user_input = Console.ReadLine();
-                            //double desired_pos = Convert.ToDouble(user_input);
-                            port.WriteLine(user_input);
-                            quick_three = false;
-                        //Console.WriteLine("lol");
-                        //port.Flush();
-                            break;
-                        }
-                    }
-                }
-                bool stop = true;
-            Console.WriteLine("Test Started");
-                while (stop)
-                {
-                    if (port.BytesToRead > 0)
-                    {
-                        string s = port.ReadLine();
-                        s = Regex.Replace(s, @"\r", string.Empty);
-                    if (s == "end")
-                        {
-                            stop = false;
-                            break;
-                        }
-                        string[] message = s.Split(',');
-                        List<double> temp = new List<double>();
-                        //temp.Add(Convert.ToDouble(s));
-                        foreach (string element in message)
-                        {
-
-                            //Console.WriteLine(element);
-
-                            double value = Convert.ToDouble(element);
-                            temp.Add(value);
-                            Console.WriteLine(element);
-
-                        }
-                        data.Add(temp);
-
-                    }
-
-
-
-
-                }
+               
 
             Console.WriteLine("here");
             using (TextWriter tw = new StreamWriter("SavedList.csv"))
@@ -128,6 +72,84 @@ namespace RPM_logger
             }
             Console.WriteLine("Wrote to file");
 
+
+        }
+
+
+        List<double> poll_for_data(SerialPortStream port, string user_input)
+        {
+            // Send Command to Start, send it desired speed to run at
+            port.Write("<1>");
+            bool quick_three = true;
+            while (quick_three)
+            {
+                if (port.BytesToRead > 0)
+                {
+                    string s = port.ReadLine();
+                    s = Regex.Replace(s, @"\r", string.Empty);
+
+                    // Either prompt user for input, or take in function line arugment for a desired RPM to run at
+                    if (s == "give")
+                    {
+                        //double position = 30.00;
+                        if (user_input.Length < 0)
+                        {
+                            Console.WriteLine("Input desired delay span");
+                            string manual_user_input = Console.ReadLine();
+                            //double desired_pos = Convert.ToDouble(user_input);
+                            port.WriteLine(manual_user_input);
+
+                        }
+                        else
+                        {
+                            port.WriteLine(user_input);
+                        }
+
+                        quick_three = false;
+                        break;
+                    }
+                }
+            }
+            bool stop = true;
+            Console.WriteLine("Test Started");
+
+            List<double> temp = new List<double>();
+            while (stop)
+            {
+                if (port.BytesToRead > 0)
+                {
+                    string s = port.ReadLine();
+                    s = Regex.Replace(s, @"\r", string.Empty);
+                    if (s == "end")
+                    {
+                        stop = false;
+                        break;
+                    }
+                    string[] message = s.Split(',');
+
+                    //temp.Add(Convert.ToDouble(s));
+                    foreach (string element in message)
+                    {
+
+                        //Console.WriteLine(element);
+
+                        double value = Convert.ToDouble(element);
+                        temp.Add(value);
+                        Console.WriteLine(element);
+
+                    }
+
+      
+                    //data.Add(temp);
+
+                }
+
+
+
+
+            }
+
+            return temp;
 
         }
 

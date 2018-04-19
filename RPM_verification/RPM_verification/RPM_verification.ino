@@ -14,7 +14,10 @@
 
 
 #include <AccelStepper.h>
-
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
 
 
 const int steps_per_revolution = 200;
@@ -33,6 +36,14 @@ char recievedChars[numChars];
 
 int c = 0;
 bool stop_test = true;
+
+// IMU
+/* Set the delay between fresh samples */
+#define BNO055_SAMPLERATE_DELAY_MS (100)
+
+Adafruit_BNO055 bno = Adafruit_BNO055();
+
+
 // the setup function runs once when you press reset or power the board
 void recieve_commands()
 {
@@ -82,6 +93,15 @@ void parseCommands()
 void setup() {
 
 	Serial.begin(115200);
+	/* Initialise the sensor */
+	if (!bno.begin())
+	{
+		/* There was a problem detecting the BNO055 ... check your connections */
+		Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+		while (1);
+	}
+
+	delay(1000);
 	Serial.println("ready");
 
 }
@@ -131,9 +151,21 @@ void loop() {
 				if (millis() > time + interval)
 				{
 					long time = millis() - start_time;
+					/* Display the current temperature */
+					int8_t temp_data = bno.getTemp();
+					imu::Vector<3> accel_data = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
+
 					Serial.print(c);
 					Serial.print(",");
 					Serial.print(time);
+					Serial.print(",");
+					Serial.print(accel_data.x());
+					Serial.print(",");
+					Serial.print(accel_data.y());
+					Serial.print(",");
+					Serial.print(accel_data.z());
+					Serial.print(",");
+					Serial.print(temp_data);
 					Serial.println();
 					if (time > 60000)
 					{
