@@ -152,7 +152,7 @@ void loop() {
 				{
 					long time = millis() - start_time;
 					/* Display the current temperature */
-					int8_t temp_data = bno.getTemp();
+					//int8_t temp_data = bno.getTemp();
 					imu::Vector<3> accel_data = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
 
 					Serial.print(c);
@@ -164,8 +164,8 @@ void loop() {
 					Serial.print(accel_data.y());
 					Serial.print(",");
 					Serial.print(accel_data.z());
-					Serial.print(",");
-					Serial.print(temp_data);
+					//Serial.print(",");
+					//Serial.print(temp_data);
 					Serial.println();
 					if (time > 60000)
 					{

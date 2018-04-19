@@ -146,7 +146,7 @@ void loop() {
 		//screen.setBacklight(RED);
 		//screen.setCursor(0, 0);
 		//screen.print("RUNNING TEST");
-		set_angle(command_packet.angle_desired);
+		//set_angle(command_packet.angle_desired);
 		Serial.println("Speed of motor: ");
 		Serial.println(rpm_stepper.speed());
 		rpm_stepper.runSpeed();
@@ -159,8 +159,8 @@ void loop() {
 			screen.clear();
 			screen.print("STOPPING Test");
 			rpm_stepper.stop();
-			angle_stepper.runToNewPosition(0);
-		    angle_stepper.stop();
+			//angle_stepper.runToNewPosition(0);
+		    //angle_stepper.stop();
 			user_input = true;
 
 		}

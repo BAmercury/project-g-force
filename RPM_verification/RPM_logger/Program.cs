@@ -15,68 +15,8 @@ namespace RPM_logger
 {
     class Program
     {
-        static void Main(string[] args)
-        {
 
-            List<List<double>> data = new List<List<double>>();
-
-            Console.WriteLine("Starting Up Program");
-
-            string serialPortName = "COM9";
-            var allPortNames = SerialPortStream.GetPortNames();
-            var distinctPorts = allPortNames.Distinct().ToList();
-
-            // If we don't specify a COM port, automagically select one if there is only a single match.
-            if (distinctPorts.SingleOrDefault() != null)
-            {
-                serialPortName = distinctPorts.Single();
-            }
-
-
-
-                SerialPortStream port = new SerialPortStream(serialPortName, 115200);
-                port.Open();
-                bool quick = true;
-                while (quick)
-                {
-                    if (port.BytesToRead > 0 )
-                    {
-                        string s = port.ReadLine();
-                        s = Regex.Replace(s, @"\r", string.Empty);
-                        Console.WriteLine("Connecting to Arduino");
-                        if (s == "ready")
-                        {
-                            quick = false;
-                            Console.WriteLine("Device Ready");
-                            break;
-                        }
-                    }
-                }
-
-               
-
-            Console.WriteLine("here");
-            using (TextWriter tw = new StreamWriter("SavedList.csv"))
-            {
-                foreach (List<double> member in data)
-                {
-                    //tw.Write(member);
-
-                    foreach (double guy in member)
-                    {
-                        tw.Write(guy);
-                        tw.Write(",");
-                    }
-                    tw.WriteLine();
-                }
-            }
-            Console.WriteLine("Wrote to file");
-
-
-        }
-
-
-        List<double> poll_for_data(SerialPortStream port, string user_input)
+        static public List<double> poll_for_data(SerialPortStream port, string user_input="0")
         {
             // Send Command to Start, send it desired speed to run at
             port.Write("<1>");
@@ -113,6 +53,8 @@ namespace RPM_logger
             bool stop = true;
             Console.WriteLine("Test Started");
 
+
+            //Collect data with this loop
             List<double> temp = new List<double>();
             while (stop)
             {
@@ -139,9 +81,6 @@ namespace RPM_logger
 
                     }
 
-      
-                    //data.Add(temp);
-
                 }
 
 
@@ -152,6 +91,72 @@ namespace RPM_logger
             return temp;
 
         }
+        static void Main(string[] args)
+        {
+
+            List<List<double>> data = new List<List<double>>();
+
+            Console.WriteLine("Starting Up Program");
+
+            string serialPortName = "COM9";
+            var allPortNames = SerialPortStream.GetPortNames();
+            var distinctPorts = allPortNames.Distinct().ToList();
+
+            // If we don't specify a COM port, automagically select one if there is only a single match.
+            if (distinctPorts.SingleOrDefault() != null)
+            {
+                serialPortName = distinctPorts.Single();
+            }
+
+
+
+                SerialPortStream port = new SerialPortStream(serialPortName, 115200);
+                port.Open();
+
+                // Hold program and wait till Device is ready
+                bool quick = true;
+                while (quick)
+                {
+                    if (port.BytesToRead > 0 )
+                    {
+                        string s = port.ReadLine();
+                        s = Regex.Replace(s, @"\r", string.Empty);
+                        Console.WriteLine("Connecting to Arduino");
+                        if (s == "ready")
+                        {
+                            quick = false;
+                            Console.WriteLine("Device Ready");
+                            break;
+                        }
+                    }
+                }
+
+            // Start Test
+            List<double> temp = poll_for_data(port);
+            data.Add(temp);
+
+            Console.WriteLine("here");
+            using (TextWriter tw = new StreamWriter("SavedList.csv"))
+            {
+                foreach (List<double> member in data)
+                {
+                    //tw.Write(member);
+
+                    foreach (double guy in member)
+                    {
+                        tw.Write(guy);
+                        tw.Write(",");
+                    }
+                    tw.WriteLine();
+                }
+            }
+            Console.WriteLine("Wrote to file");
+
+
+        }
+
+
+        
 
         }
     }
