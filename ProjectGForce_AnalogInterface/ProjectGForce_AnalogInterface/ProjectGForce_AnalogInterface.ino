@@ -69,9 +69,9 @@ struct CommandPacket prompt_user_input()
     screen.clear();
 		screen.setCursor(0, 0);
 		screen.print("RPM: ");
-		//rpm_stick = analogRead(0);
-		//rpm_desired = map(rpm_stick, 0, 1023, 0, 150);
-		rpm_desired = 100;
+		rpm_stick = analogRead(0);
+		rpm_desired = map(rpm_stick, 0, 1023, 0, 150);
+		//rpm_desired = 100;
 		screen.print(rpm_desired);
 
 		screen.setCursor(0, 1);
@@ -146,9 +146,9 @@ void loop() {
 		//screen.setBacklight(RED);
 		//screen.setCursor(0, 0);
 		//screen.print("RUNNING TEST");
-		set_angle(command_packet.angle_desired);
-		Serial.println("Speed of motor: ");
-		Serial.println(rpm_stepper.speed());
+		//set_angle(command_packet.angle_desired);
+		//Serial.println("Speed of motor: ");
+		//Serial.println(rpm_stepper.speed());
 		rpm_stepper.runSpeed();
 		//set_rpm(desired_speed);
 

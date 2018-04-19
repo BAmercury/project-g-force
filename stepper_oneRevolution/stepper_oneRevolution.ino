@@ -31,24 +31,24 @@ int limit_switch = 2;
 void setup() {
   // set the speed at 60 rpm:
   //myStepper.setSpeed(150);
-  myStepper.setSpeed(60);
+  myStepper.setSpeed(20);
   // initialize the serial port:
   //(digitalPinToInterrupt(interruptPin), reset_angle, RISING);
 
   Serial.begin(115200);
-  pinMode(limit_switch, INPUT);
+  //pinMode(limit_switch, INPUT);
   //reset();
 }
 
 void loop() {
 
-  int switch1 = digitalRead(limit_switch); //define the limit switch as switch 1
-  Serial.println(switch1);
-  if (switch1 == LOW)
-  {
+ // int switch1 = digitalRead(limit_switch); //define the limit switch as switch 1
+  //Serial.println(switch1);
+  //if (switch1 == LOW)
+  //{
 
-    myStepper.step(100);
-  }
+    myStepper.step(200);
+  //}
 }
 
 void reset()
