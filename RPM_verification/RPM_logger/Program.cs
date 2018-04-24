@@ -16,7 +16,7 @@ namespace RPM_logger
     class Program
     {
 
-        static public List<double> poll_for_data(SerialPortStream port, string user_input="0")
+        static public List<List<double>> poll_for_data(SerialPortStream port, string user_input="0")
         {
             // Send Command to Start, send it desired speed to run at
             port.Write("<1>");
@@ -31,19 +31,7 @@ namespace RPM_logger
                     // Either prompt user for input, or take in function line arugment for a desired RPM to run at
                     if (s == "give")
                     {
-                        //double position = 30.00;
-                        if (user_input.Length < 0)
-                        {
-                            Console.WriteLine("Input desired delay span");
-                            string manual_user_input = Console.ReadLine();
-                            //double desired_pos = Convert.ToDouble(user_input);
-                            port.WriteLine(manual_user_input);
-
-                        }
-                        else
-                        {
-                            port.WriteLine(user_input);
-                        }
+                        port.WriteLine(user_input);
 
                         quick_three = false;
                         break;
@@ -56,6 +44,7 @@ namespace RPM_logger
 
             //Collect data with this loop
             List<double> temp = new List<double>();
+            List<List<double>> data = new List<List<double>>();
             while (stop)
             {
                 if (port.BytesToRead > 0)
@@ -80,6 +69,8 @@ namespace RPM_logger
                         Console.WriteLine(element);
 
                     }
+                    data.Add(temp);
+                    
 
                 }
 
@@ -88,13 +79,13 @@ namespace RPM_logger
 
             }
 
-            return temp;
+            return data;
 
         }
         static void Main(string[] args)
         {
 
-            List<List<double>> data = new List<List<double>>();
+            
 
             Console.WriteLine("Starting Up Program");
 
@@ -132,11 +123,17 @@ namespace RPM_logger
                 }
 
             // Start Test
-            List<double> temp = poll_for_data(port);
-            data.Add(temp);
+            Console.WriteLine("Input Desired RPM: ");
+            string user_input = Console.ReadLine();
+            double temp_user_input = Convert.ToDouble(user_input);
+            user_input = ((temp_user_input * 200) / 60).ToString();
+            List<List<double>> data = new List<List<double>>();
+            data = poll_for_data(port, user_input);
 
-            Console.WriteLine("here");
-            using (TextWriter tw = new StreamWriter("SavedList.csv"))
+            // After test is over write it to file
+            Console.WriteLine("File Name: ");
+            string file_name = Console.ReadLine();
+            using (TextWriter tw = new StreamWriter(file_name + ".csv"))
             {
                 foreach (List<double> member in data)
                 {
